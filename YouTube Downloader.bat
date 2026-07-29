@@ -1,11 +1,11 @@
 ::[Bat To Exe Converter]
 ::
 ::YAwzoRdxOk+EWAjk
-::fBw5plQjdCmDJGqH5ksgPAhoVRDPOGeqOqwI5fiooeOErS0=
+::fBw5plQjdCmDJGqH5ksgPAhoVRDPOGeqOowT/dzu7e/KhkIKWu4weYveyPqHI+9z
 ::YAwzuBVtJxjWCl3EqQJgSA==
 ::ZR4luwNxJguZRRnk
 ::Yhs/ulQjdF+5
-::cxAkpRVqdFKZSDk=
+::cxAkpRVqdFKZSjk=
 ::cBs/ulQjdF+5
 ::ZR41oxFsdFKZSDk=
 ::eBoioBt6dFKZSDk=
@@ -26,14 +26,14 @@
 ::ZQ0/vhVqMQ3MEVWAtB9wSA==
 ::Zg8zqx1/OA3MEVWAtB9wSA==
 ::dhA7pRFwIByZRRnk
-::Zh4grVQjdCmDJGqH5ksgPAhoVRDPOGeqOowT/dzu7e/KhkIKWu4wfIrJlLGWJYA=
+::Zh4grVQjdCmDJGqH5ksgPAhoVRDPOGeqOowT/dzu7e/HhkIKWu4weYveyPqLOOVz
 ::YB416Ek+ZG8=
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
 @echo off
 title YouTube Downloader v1.1
-color 0A
+color 02
 
 :: Use a local "bin" folder (next to this script) for dependencies like
 :: yt-dlp.exe and ffmpeg.exe, in addition to anything already in PATH.
@@ -41,13 +41,33 @@ set "SCRIPT_DIR=%~dp0"
 set "BIN_DIR=%SCRIPT_DIR%bin"
 set "PATH=%BIN_DIR%;%PATH%"
 
+:: First-run setup: if dependencies aren't in the bin folder yet,
+:: run the installer automatically. Later runs skip this instantly.
+if not exist "%BIN_DIR%\yt-dlp.exe" goto FIRSTRUN
+if not exist "%BIN_DIR%\ffmpeg.exe" goto FIRSTRUN
+goto CHECKS
+
+:FIRSTRUN
+if not exist "%SCRIPT_DIR%install.bat" (
+    echo.
+    echo ERROR: Dependencies are missing and install.bat was not found
+    echo in "%SCRIPT_DIR%".
+    pause
+    exit
+)
+echo.
+echo First run detected - setting up dependencies, please wait...
+echo.
+call "%SCRIPT_DIR%install.bat" /silent
+
+:CHECKS
 :: Check for yt-dlp
 where yt-dlp >nul 2>&1
 if errorlevel 1 (
     echo.
     echo ERROR: yt-dlp.exe not found.
-    echo Run install.bat first to download dependencies automatically,
-    echo or place yt-dlp.exe manually in "%BIN_DIR%".
+    echo Run install.bat manually to download dependencies,
+    echo or place yt-dlp.exe in "%BIN_DIR%".
     pause
     exit
 )
@@ -58,8 +78,8 @@ if errorlevel 1 (
     echo.
     echo WARNING: ffmpeg.exe not found.
     echo MP3 conversion, thumbnails, and metadata embedding will fail.
-    echo Run install.bat first to download dependencies automatically,
-    echo or place ffmpeg.exe manually in "%BIN_DIR%".
+    echo Run install.bat manually to download dependencies,
+    echo or place ffmpeg.exe in "%BIN_DIR%".
     echo.
     pause
 )
@@ -70,7 +90,7 @@ echo ============================================
 echo           YouTube Downloader v1.1
 echo ============================================
 echo.
-echo 1. Download Single Video
+echo 1. Single Download
 echo 2. Download Playlist
 echo 3. Exit
 echo.
@@ -88,7 +108,7 @@ goto MENU
 :FORMAT_SINGLE
 cls
 echo ================================
-echo Single Video
+echo Single Download
 echo ================================
 echo.
 echo 1. MP4 Video

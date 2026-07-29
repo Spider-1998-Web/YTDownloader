@@ -1,10 +1,15 @@
 @echo off
 title YouTube Downloader - Installer
-color 0A
+color 02
 
 set "SCRIPT_DIR=%~dp0"
 set "BIN_DIR=%SCRIPT_DIR%bin"
 set "TEMP_DIR=%SCRIPT_DIR%install_temp"
+
+:: Pass /silent (e.g. called automatically from ytmp3.bat) to skip pauses
+:: on success. Errors still pause so the problem is visible either way.
+set "SILENT=0"
+if /i "%~1"=="/silent" set "SILENT=1"
 
 echo ============================================
 echo   YouTube Downloader - Dependency Installer
@@ -15,8 +20,10 @@ if not exist "%BIN_DIR%" mkdir "%BIN_DIR%"
 if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
 
 :: --- yt-dlp ---
-echo Downloading yt-dlp...
-curl -L -o "%BIN_DIR%\yt-dlp.exe" "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
+echo [1/3] yt-dlp
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%download_progress.ps1" ^
+    -Url "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" ^
+    -OutFile "%BIN_DIR%\yt-dlp.exe" -Label "  Downloading yt-dlp.exe"
 if not exist "%BIN_DIR%\yt-dlp.exe" (
     echo.
     echo ERROR: Failed to download yt-dlp.exe
@@ -24,12 +31,13 @@ if not exist "%BIN_DIR%\yt-dlp.exe" (
     pause
     exit /b 1
 )
-echo Done.
 echo.
 
 :: --- ffmpeg ---
-echo Downloading ffmpeg (this is a larger file, may take a minute)...
-curl -L -o "%TEMP_DIR%\ffmpeg.zip" "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip"
+echo [2/3] ffmpeg
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%download_progress.ps1" ^
+    -Url "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip" ^
+    -OutFile "%TEMP_DIR%\ffmpeg.zip" -Label "  Downloading ffmpeg.zip"
 if not exist "%TEMP_DIR%\ffmpeg.zip" (
     echo.
     echo ERROR: Failed to download ffmpeg.
@@ -37,8 +45,9 @@ if not exist "%TEMP_DIR%\ffmpeg.zip" (
     pause
     exit /b 1
 )
+echo.
 
-echo Extracting ffmpeg...
+echo [3/3] Extracting ffmpeg
 powershell -NoProfile -Command "Expand-Archive -Force '%TEMP_DIR%\ffmpeg.zip' '%TEMP_DIR%\ffmpeg_extracted'"
 
 :: The zip contains a versioned subfolder like ffmpeg-master-latest-win64-gpl\bin
@@ -69,4 +78,4 @@ echo   yt-dlp and ffmpeg are ready in: %BIN_DIR%
 echo   You can now run ytmp3.bat
 echo ============================================
 echo.
-pause
+if "%SILENT%"=="0" pause
