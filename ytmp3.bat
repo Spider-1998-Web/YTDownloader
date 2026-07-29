@@ -2,13 +2,31 @@
 title YouTube Downloader v1.1
 color 0A
 
+:: Use a local "bin" folder (next to this script) for dependencies like
+:: yt-dlp.exe and ffmpeg.exe, in addition to anything already in PATH.
+set "SCRIPT_DIR=%~dp0"
+set "BIN_DIR=%SCRIPT_DIR%bin"
+set "PATH=%BIN_DIR%;%PATH%"
+
 :: Check for yt-dlp
 where yt-dlp >nul 2>&1
 if errorlevel 1 (
     echo.
-    echo ERROR: yt-dlp is not installed or not in PATH.
+    echo ERROR: yt-dlp.exe not found.
+    echo Place it in "%BIN_DIR%" or install it and add it to PATH.
     pause
     exit
+)
+
+:: Check for ffmpeg (needed for MP3 conversion, thumbnails, metadata)
+where ffmpeg >nul 2>&1
+if errorlevel 1 (
+    echo.
+    echo WARNING: ffmpeg.exe not found.
+    echo MP3 conversion, thumbnails, and metadata embedding will fail.
+    echo Place ffmpeg.exe in "%BIN_DIR%" or install it and add it to PATH.
+    echo.
+    pause
 )
 
 :MENU
