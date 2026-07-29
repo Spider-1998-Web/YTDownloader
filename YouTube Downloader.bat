@@ -13,7 +13,8 @@ where yt-dlp >nul 2>&1
 if errorlevel 1 (
     echo.
     echo ERROR: yt-dlp.exe not found.
-    echo Place it in "%BIN_DIR%" or install it and add it to PATH.
+    echo Run install.bat first to download dependencies automatically,
+    echo or place yt-dlp.exe manually in "%BIN_DIR%".
     pause
     exit
 )
@@ -24,7 +25,8 @@ if errorlevel 1 (
     echo.
     echo WARNING: ffmpeg.exe not found.
     echo MP3 conversion, thumbnails, and metadata embedding will fail.
-    echo Place ffmpeg.exe in "%BIN_DIR%" or install it and add it to PATH.
+    echo Run install.bat first to download dependencies automatically,
+    echo or place ffmpeg.exe manually in "%BIN_DIR%".
     echo.
     pause
 )
