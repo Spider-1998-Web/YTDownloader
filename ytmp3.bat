@@ -78,6 +78,19 @@ set /p FOLDER=Download folder:
 
 if "%FOLDER%"=="" set "FOLDER=%USERPROFILE%\Downloads"
 
+if not exist "%FOLDER%\" (
+    echo.
+    echo Folder does not exist, creating it...
+    mkdir "%FOLDER%" 2>nul
+    if errorlevel 1 (
+        echo.
+        echo ERROR: Could not create folder "%FOLDER%".
+        echo Check that the drive letter/path is correct.
+        pause
+        goto MENU
+    )
+)
+
 echo.
 echo Downloading...
 echo.
@@ -86,7 +99,7 @@ goto :eof
 
 :SINGLE_MP4
 call :GETINFO
-yt-dlp -f "bv*+ba/b" ^
+yt-dlp --no-playlist -f "bv*+ba/b" ^
 -o "%FOLDER%\%%(title)s.%%(ext)s" ^
 "%URL%"
 pause
@@ -95,6 +108,7 @@ goto MENU
 :SINGLE_MP3
 call :GETINFO
 yt-dlp ^
+--no-playlist ^
 --extract-audio ^
 --audio-format mp3 ^
 --audio-quality 0 ^
