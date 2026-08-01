@@ -1,39 +1,6 @@
-::[Bat To Exe Converter]
-::
-::YAwzoRdxOk+EWAjk
-::fBw5plQjdCmDJGqH5ksgPAhoVRDPOGeqOowT/dzu7e/KhkIKWu4weYveyPqHI+9z
-::YAwzuBVtJxjWCl3EqQJgSA==
-::ZR4luwNxJguZRRnk
-::Yhs/ulQjdF+5
-::cxAkpRVqdFKZSjk=
-::cBs/ulQjdF+5
-::ZR41oxFsdFKZSDk=
-::eBoioBt6dFKZSDk=
-::cRo6pxp7LAbNWATEpCI=
-::egkzugNsPRvcWATEpCI=
-::dAsiuh18IRvcCxnZtBJQ
-::cRYluBh/LU+EWAnk
-::YxY4rhs+aU+JeA==
-::cxY6rQJ7JhzQF1fEqQJQ
-::ZQ05rAF9IBncCkqN+0xwdVs0
-::ZQ05rAF9IAHYFVzEqQJQ
-::eg0/rx1wNQPfEVWB+kM9LVsJDGQ=
-::fBEirQZwNQPfEVWB+kM9LVsJDGQ=
-::cRolqwZ3JBvQF1fEqQJQ
-::dhA7uBVwLU+EWDk=
-::YQ03rBFzNR3SWATElA==
-::dhAmsQZ3MwfNWATElA==
-::ZQ0/vhVqMQ3MEVWAtB9wSA==
-::Zg8zqx1/OA3MEVWAtB9wSA==
-::dhA7pRFwIByZRRnk
-::Zh4grVQjdCmDJGqH5ksgPAhoVRDPOGeqOowT/dzu7e/HhkIKWu4weYveyPqLOOVz
-::YB416Ek+ZG8=
-::
-::
-::978f952a14a936cc963da21a135fa983
 @echo off
 title YouTube Downloader v1.1
-color 02
+color 0F
 
 :: Use a local "bin" folder (next to this script) for dependencies like
 :: yt-dlp.exe and ffmpeg.exe, in addition to anything already in PATH.
@@ -90,7 +57,7 @@ echo ============================================
 echo           YouTube Downloader v1.1
 echo ============================================
 echo.
-echo 1. Single Download
+echo 1. Download Single Video
 echo 2. Download Playlist
 echo 3. Exit
 echo.
@@ -108,7 +75,7 @@ goto MENU
 :FORMAT_SINGLE
 cls
 echo ================================
-echo Single Download
+echo Single Video
 echo ================================
 echo.
 echo 1. MP4 Video
@@ -145,11 +112,13 @@ goto FORMAT_PLAYLIST
 echo.
 set /p URL=Paste YouTube URL: 
 
+set "DEFAULT_FOLDER=%USERPROFILE%\Downloads\%~1"
+
 echo.
-echo Press Enter to use your Downloads folder.
+echo Press Enter to use your Downloads\%~1 folder.
 set /p FOLDER=Download folder: 
 
-if "%FOLDER%"=="" set "FOLDER=%USERPROFILE%\Downloads"
+if "%FOLDER%"=="" set "FOLDER=%DEFAULT_FOLDER%"
 
 if not exist "%FOLDER%\" (
     echo.
@@ -171,7 +140,7 @@ echo.
 goto :eof
 
 :SINGLE_MP4
-call :GETINFO
+call :GETINFO Video
 yt-dlp --no-playlist -f "bv*+ba/b" ^
 -o "%FOLDER%\%%(title)s.%%(ext)s" ^
 "%URL%"
@@ -179,7 +148,7 @@ pause
 goto MENU
 
 :SINGLE_MP3
-call :GETINFO
+call :GETINFO Music
 yt-dlp ^
 --no-playlist ^
 --extract-audio ^
@@ -193,7 +162,7 @@ pause
 goto MENU
 
 :PLAYLIST_MP4
-call :GETINFO
+call :GETINFO Video
 yt-dlp ^
 -f "bv*+ba/b" ^
 -o "%FOLDER%\%%(playlist_index)s - %%(title)s.%%(ext)s" ^
@@ -202,7 +171,7 @@ pause
 goto MENU
 
 :PLAYLIST_MP3
-call :GETINFO
+call :GETINFO Music
 yt-dlp ^
 --extract-audio ^
 --audio-format mp3 ^

@@ -27,8 +27,6 @@ if (-not (Test-Path $YtDlp)) {
     exit 1
 }
 
-$downloadsFolder = Join-Path $env:USERPROFILE "Downloads"
-
 $choice = [System.Windows.Forms.MessageBox]::Show(
     "Download this video as MP3 audio instead of MP4 video?`n`nYes = MP3 audio`nNo = MP4 video`nCancel = don't download",
     "YT Downloader",
@@ -42,12 +40,16 @@ if ($choice -eq [System.Windows.Forms.DialogResult]::Cancel) {
 
 if ($choice -eq [System.Windows.Forms.DialogResult]::Yes) {
     $formatArgs = '--extract-audio --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata'
+    $downloadsFolder = Join-Path $env:USERPROFILE "Downloads\Music"
 } else {
     $formatArgs = '-f "bv*+ba/b"'
+    $downloadsFolder = Join-Path $env:USERPROFILE "Downloads\Video"
 }
 
-# Build a small throwaway .bat so quoting stays simple, and so the user
-# sees yt-dlp's own live progress bar in a normal console window.
+if (-not (Test-Path $downloadsFolder)) {
+    New-Item -ItemType Directory -Path $downloadsFolder -Force | Out-Null
+}
+
 # Write the yt-dlp command to a small helper .bat so quoting stays simple,
 # and so the user sees yt-dlp's own live progress bar in a normal console
 # window. This file is overwritten (not deleted) on each run.
