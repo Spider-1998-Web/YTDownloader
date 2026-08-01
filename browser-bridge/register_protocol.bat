@@ -3,7 +3,8 @@ title Register ytdlp:// Protocol
 color 0F
 
 set "SCRIPT_DIR=%~dp0"
-set "HANDLER=%SCRIPT_DIR%handle_download.ps1"
+set "HANDLER_EXE=%SCRIPT_DIR%handle_download.exe"
+set "HANDLER_PS1=%SCRIPT_DIR%handle_download.ps1"
 
 set "SILENT=0"
 if /i "%~1"=="/silent" set "SILENT=1"
@@ -15,15 +16,21 @@ if "%SILENT%"=="0" (
     echo.
 )
 
-if not exist "%HANDLER%" (
-    echo ERROR: handle_download.ps1 not found in this folder.
+if not exist "%HANDLER_EXE%" if not exist "%HANDLER_PS1%" (
+    echo ERROR: No handler found ^(expected handle_download.exe or
+    echo handle_download.ps1^) in this folder.
     if "%SILENT%"=="0" pause
     exit /b 1
 )
 
 reg add "HKCU\Software\Classes\ytdlp" /ve /d "URL:YTDLP Protocol" /f >nul
 reg add "HKCU\Software\Classes\ytdlp" /v "URL Protocol" /d "" /f >nul
-reg add "HKCU\Software\Classes\ytdlp\shell\open\command" /ve /d "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%HANDLER%\" \"%%1\"" /f >nul
+
+if exist "%HANDLER_EXE%" (
+    reg add "HKCU\Software\Classes\ytdlp\shell\open\command" /ve /d "\"%HANDLER_EXE%\" \"%%1\"" /f >nul
+) else (
+    reg add "HKCU\Software\Classes\ytdlp\shell\open\command" /ve /d "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%HANDLER_PS1%\" \"%%1\"" /f >nul
+)
 
 if errorlevel 1 (
     echo.

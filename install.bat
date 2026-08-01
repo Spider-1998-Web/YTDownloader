@@ -73,13 +73,12 @@ rmdir /s /q "%TEMP_DIR%"
 
 echo.
 set "BRIDGE_DIR=%SCRIPT_DIR%browser-bridge"
+set "DID_REGISTER=0"
 if exist "%BRIDGE_DIR%\register_protocol.bat" (
     echo [4/4] Browser integration
     call "%BRIDGE_DIR%\register_protocol.bat" /silent
-    if exist "%BRIDGE_DIR%\register_protocol.bat" echo Done.
+    echo Done.
     set "DID_REGISTER=1"
-) else (
-    set "DID_REGISTER=0"
 )
 
 echo.

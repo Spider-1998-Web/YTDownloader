@@ -3,7 +3,7 @@
   let lastUrl = "";
 
   function isWatchPage() {
-    return /^https:\/\/www\.youtube\.com\/watch/.test(location.href);
+    return /^https:\/\/www\.youtube\.com\/(watch|shorts\/)/.test(location.href);
   }
 
   function addButton() {
