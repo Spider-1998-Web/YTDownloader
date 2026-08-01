@@ -144,6 +144,11 @@ call :GETINFO Video
 yt-dlp --no-playlist -f "bv*+ba/b" ^
 -o "%FOLDER%\%%(title)s.%%(ext)s" ^
 "%URL%"
+if errorlevel 1 (
+    echo.
+    echo NOTE: If this failed due to "Sign in to confirm your age",
+    echo that video is age-restricted and can't be downloaded by this tool.
+)
 pause
 goto MENU
 
