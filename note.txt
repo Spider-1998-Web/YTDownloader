@@ -1,0 +1,3 @@
+This is sort of an update note for myself
+First update added the open meet button and fixed all the
+Completely tested and working portion
