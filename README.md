@@ -1,64 +1,17 @@
-# IT Downloader v1.1
+# IT Downloader V2
 
-IT Downloader is a Windows desktop application designed to download supported online videos and audio using a simple graphical interface.
+A native C++ rewrite of IT Downloader.
 
-Version 1.1 begins the migration from the previous PowerShell/PS2EXE implementation to a native C++ Windows application.
+## Version History
 
-## Version 1.1 Status
+### V1.0 — CMD Version
 
-This version Complete
+The original command-line version of IT Downloader.
 
-The native C++ application has been successfully created and compiled using Visual Studio. The first test build confirms that the Windows GUI application and C++ development environment are working correctly.
+### V1.1 — PowerShell GUI Version
 
-## Current Progress
+The graphical version built with PowerShell and packaged as an EXE using PS2EXE.
 
-- [x] Visual Studio C++ development environment installed
-- [x] Native Windows C++ project created
-- [x] Windows GUI application successfully compiled
-- [x] `WinMain()` entry point configured
-- [x] First native C++ EXE successfully launched
-- [ ] Command-line URL support
-- [ ] Main downloader interface
-- [ ] MP4 and MP3 format selection
-- [ ] Playlist selection
-- [ ] Download-folder selection
-- [ ] `yt-dlp.exe` integration
-- [ ] `ffmpeg.exe` integration
-- [ ] Live download progress
-- [ ] Download completion dialog
-- [ ] Chrome extension integration
-- [ ] Release build and testing
+### V2.0 — Native C++ Version
 
-## Technology
-
-The new application is being developed with:
-
-- C++
-- Native Windows API (Win32)
-- Microsoft Visual Studio Community
-- Windows SDK
-- `yt-dlp`
-- FFmpeg
-
-## Project Structure
-
-```text
-IT-Downloader/
-│
-├── YTDownloaderCpp/
-│   ├── main.cpp
-│   ├── YTDownloaderCpp.sln
-│   └── Additional C++ source files
-│
-├── Chrome-Extension/
-│   ├── manifest.json
-│   ├── background.js
-│   ├── content.js
-│   ├── popup.html
-│   ├── popup.js
-│   └── icons/
-│
-├── yt-dlp.exe
-├── ffmpeg.exe
-├── ffprobe.exe
-└── README.md
+The current version under development. V2 replaces the PowerShell/PS2EXE application with a native C++ Windows application while preserving the downloader features and Chrome companion extension support.
